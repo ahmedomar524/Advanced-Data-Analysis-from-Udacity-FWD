@@ -1,0 +1,74 @@
+Question 1
+We want to find out the most popular music Genre for each country,
+We determine the most popular genre as the genre with the highest amount of purchases,
+Write a query that returns each country along with the top Genre. or countries where the maximum number of purchases is shared, return all Genres?
+
+ANSWER
+WITH t1 AS (SELECT sum(il.Quantity) purchases,i.BillingCountry, g.Name,g.GenreId
+			FROM Invoice i
+			JOIN InvoiceLine il
+			ON i.InvoiceId=il.InvoiceId  
+			JOIN Track t
+			ON il.TrackId=t.TrackId
+			JOIN Genre g
+			ON t.GenreId=g.GenreId
+			GROUP BY 2,3
+			ORDER BY 2,3),
+	 t2 AS (SELECT t1.BillingCountry,max(t1.purchases) AS max_purchases 
+			FROM t1
+			GROUP BY 1 )
+SELECT max_purchases ,t1.BillingCountry,t1.Name ,t1.GenreId
+from t1
+JOIN t2
+on t1.BillingCountry=t2.BillingCountry  AND t1.purchases=t2.max_purchases
+
+=============================================================================================================================================
+Question 2
+Return all the track names that have a song length longer than the average song length and the name of artist?
+
+ANSWER
+SELECT t.Name,t.Milliseconds,ar.Name as Artist_Name
+FROM Track t
+JOIN Album ab
+ON ab.AlbumId=t.AlbumId
+JOIN Artist ar
+ON ar.ArtistId=ab.ArtistId
+WHERE Milliseconds>(SELECT avg(Milliseconds)
+					FROM Track)
+ORDER BY 2 DESC		
+
+==============================================================================================================================================
+Question 3
+Write a query that determines the customer that has spent the most on music for each country. 
+Or Write a query that returns the country along with the top customer and how much they spent, 
+For countries where the top amount spent is shared, provide all customers who spent this amount ?
+ANSWER:
+WITH t1 AS (SELECT c.CustomerId, Country,sum(Total) AS TotalSpent, c.FirstName,c.LastName 
+			FROM Invoice i
+			JOIN Customer c
+			on i.CustomerId=c.CustomerId
+			GROUP BY 1),
+   t2 AS   (SELECT Country,Max(TotalSpent) as max_spent,CustomerId
+			FROM t1
+			GROUP BY 1)
+SELECT t1.Country,max_spent, FirstName,LastName ,t1.CustomerId
+FROM t1 
+JOIN t2
+on t1.Country=t2.Country  AND t1.TotalSpent=t2.max_spent
+ORDER BY 1
+
+==============================================================================================================================================
+Question 4
+Determine the most popular artist which has the highest number of sales?
+
+ANSWER
+SELECT ar.Name as Artist_Name,sum(il.Quantity) AS Total_sales
+FROM Track t
+JOIN InvoiceLine il
+ON il.TrackId=t.TrackId
+JOIN Album ab
+ON ab.AlbumId=t.AlbumId
+JOIN Artist ar
+ON ar.ArtistId=ab.ArtistId
+GROUP BY 1
+ORDER BY 2 DESC
