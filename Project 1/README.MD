@@ -3,11 +3,8 @@ In this project, I was to query the Chinook Database. The Chinook Database holds
 The schema for the Chinook Database is provided below. You can see the columns that link tables together via the arrows.
 ![image](https://user-images.githubusercontent.com/58519268/224508824-217b9c25-76f1-4f75-b248-1f96e0560735.png)
 
-##  In this project I create a presentation include:
-Four slides.
+## This repo  include:
 
-One visualization per slide.
+1-A presentation that I create to visualize project this presentation include:One visualization per slide and A 1-2 sentence explanation of each slide.
 
-A 1-2 sentence explanation of each slide.
-
-The SQL query is used to create the data used in the visualization.
+2-The SQL query is used to create the data used in the visualization.
